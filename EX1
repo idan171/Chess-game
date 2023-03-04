@@ -1,0 +1,184 @@
+
+import random
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from datetime import datetime
+import matplotlib.pyplot as plt
+
+
+df_temperature = pd.read_csv('/Users/idanvazana/Library/Mobile Documents/com~apple~CloudDocs/M.sc - Data Science/סמסטר ב/סדרות עתיות/מטלה/city_temperature.csv')
+
+df_walmart = pd.read_csv('/Users/idanvazana/Library/Mobile Documents/com~apple~CloudDocs/M.sc - Data Science/סמסטר ב/סדרות עתיות/מטלה/walmart_sales.csv')
+
+
+# # Temperature Daraset
+
+
+df_temperature.head(12)
+
+
+df_temperature.shape
+
+
+
+df_temperature = df_temperature.drop_duplicates()
+df_temperature.shape
+
+
+
+for column in df_temperature:
+    try:
+        unique_vals = np.unique(df_temperature[column])
+        nr_values = len(unique_vals)
+        if nr_values < 5:
+            print ('The number of values for feature {} : {} -- {}'.format(column, nr_values,unique_vals))
+        else:
+            print ('The number of values for feature {} : {}'.format(column, nr_values))
+    except:
+        print ("Columns ",column, " contains Null Values")
+
+
+
+
+df_temperature.State
+
+
+
+
+
+df_temperature = df_temperature.drop(['State'], axis=1)
+
+
+
+
+
+df_temperature.shape
+
+
+
+
+df_temperature.info()
+
+
+
+
+df_temperature.describe(include='float').T
+
+
+# In[13]:
+
+
+sns.boxplot(data=df_temperature, x='AvgTemperature', orient="h")
+plt.show()
+
+
+# In[17]:
+
+
+df_temperature_n = df_temperature.groupby(['Country', 'Year']).mean()
+df_temperature_n = df_temperature_n.drop(['Month','Day'], axis=1)
+df_temperature_n
+
+
+# In[26]:
+
+
+df_temperature_n = df_temperature_n.groupby(['Country']).mean()
+df_temperature_n
+
+
+# In[44]:
+
+
+ax = df_temperature_n.plot.bar(y='AvgTemperature',color ='darkcyan',figsize=(25, 15))
+
+
+# # Walmart Dataset
+
+# In[68]:
+
+
+df_walmart.head(12)
+
+
+# In[74]:
+
+
+df_walmart.shape
+
+
+# In[80]:
+
+
+df_walmart = df_walmart.drop_duplicates()
+df_walmart.shape
+
+
+# In[81]:
+
+
+for column in df_walmart:
+    try:
+        unique_vals = np.unique(df_walmart[column])
+        nr_values = len(unique_vals)
+        if nr_values < 5:
+            print ('The number of values for feature {} : {} -- {}'.format(column, nr_values,unique_vals))
+        else:
+            print ('The number of values for feature {} : {}'.format(column, nr_values))
+    except:
+        print ("Columns ",column, " contains Null Values")
+
+
+# In[82]:
+
+
+df_walmart.info()
+
+
+# In[83]:
+
+
+a = df_walmart.describe(include='float').T
+a
+
+
+# In[86]:
+
+
+sns.boxplot(data=df_walmart, x='Weekly_Sales')
+plt.show()
+
+
+# In[87]:
+
+
+sns.boxplot(data=df_walmart, x='CPI')
+plt.show()
+
+
+# In[88]:
+
+
+sns.boxplot(data=df_walmart, x='Fuel_Price')
+plt.show()
+
+
+# In[89]:
+
+
+df_walmart_n = df_walmart.groupby(['Store']).mean()
+df_walmart_n
+
+
+# In[67]:
+
+
+ay = df_walmart_n.plot.bar(y='Weekly_Sales',color ='mediumvioletred',figsize=(25, 15))
+
+
+# In[ ]:
+
+
+
+
